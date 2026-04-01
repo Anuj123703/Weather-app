@@ -1,13 +1,11 @@
 import { loginUser } from "../services/AuthService";
 import { useNavigate, Link } from "react-router-dom";
-import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../Config/firebase";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { getRedirectResult } from "firebase/auth";
 import {API} from "../services/AuthService";
-
-
+import { signInWithRedirect } from "firebase/auth";
 
 function Login() {
 
