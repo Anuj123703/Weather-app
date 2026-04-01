@@ -1,15 +1,17 @@
-import { useState } from "react";
 import { loginUser } from "../services/AuthService";
 import { useNavigate, Link } from "react-router-dom";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../Config/firebase";
 import axios from "axios";
+import { useState, useEffect } from "react";
+import { getRedirectResult } from "firebase/auth";
 
 
 
 function Login() {
 
     const navigate = useNavigate();
+    const API = "https://weather-app-icbr.onrender.com";
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -27,25 +29,32 @@ function Login() {
             setError(error.response?.data?.message || "Invalid credentials");
         }
     };
-    
-    const handleGoogleLogin = async () => {
+
+    const handleGoogleLogin = () => {
+        signInWithRedirect(auth, provider); // trigger redirect
+    };
+
+    useEffect(() => {
+        const fetchRedirectResult = async () => {
             try {
-                const result = await signInWithPopup(auth, provider);
+                const result = await getRedirectResult(auth);
+                if (!result) return; // first load, no redirect yet
+
                 const user = result.user;
-                // send to backend
-                const res = await axios.post("http://localhost:5000/api/auth/users/google", {
+                const res = await axios.post(`${API}/api/auth/users/google`, {
                     name: user.displayName,
                     email: user.email,
                 });
-                // ✅ token store
+
                 localStorage.setItem("token", res.data.token);
-                // ✅ REDIRECT
-                navigate("/");
-            } catch (error) {
-                console.log(error);
+                navigate("/"); // redirect after login
+            } catch (err) {
+                console.error(err);
             }
-        
-    };
+        };
+
+        fetchRedirectResult();
+    }, []);
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-200 to-cyan-100">
