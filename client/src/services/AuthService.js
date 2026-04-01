@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:5000/api/auth/users";
+const API = "https://weather-app-icbr.onrender.com";
 
 export const registerUser = (data) => {
     return axios.post(`${API}/register`, data);
