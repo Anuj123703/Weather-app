@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registerUser, loginUser } from "../controllers/auth.Controller.js";
+import { registerUser, loginUser } from "../controllers/auth.controller.js";
 import { verifyjwt } from "../middleware/auth.middleware.js";
 import { googleAuth } from "../controllers/user.controller.js"
 
