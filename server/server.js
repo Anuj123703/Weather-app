@@ -3,20 +3,26 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.routes.js";
-import cors from "cors";
-
-app.use(cors({
-    origin: "*"
-}));
 
 dotenv.config();
 connectDB();
 
-const app = express();
+const app = express(); // ✅ SABSE PEHLE
 
-app.use(cors());
+// 🔥 COOP FIX (IMPORTANT)
+app.use((req, res, next) => {
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+    next();
+});
+
+// ✅ CORS
+app.use(cors({
+    origin: "*"
+}));
+
 app.use(express.json());
 
+// routes
 app.use("/api/auth/users", userRoutes);
 
 app.get("/", (req, res) => {

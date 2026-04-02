@@ -2,9 +2,8 @@ import { loginUser } from "../services/AuthService";
 import { useNavigate, Link } from "react-router-dom";
 import { auth, provider } from "../Config/firebase";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import { getRedirectResult } from "firebase/auth";
-import { signInWithRedirect } from "firebase/auth";
+import { useState } from "react";
+import { signInWithPopup } from "firebase/auth";
 
 function Login() {
     const API = import.meta.env.VITE_API_URL;
@@ -27,31 +26,28 @@ function Login() {
         }
     };
 
-    const handleGoogleLogin = () => {
-        signInWithRedirect(auth, provider); // trigger redirect
+    const handleGoogleLogin = async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+
+            const user = result.user;
+
+            const res = await axios.post(`${API}/api/v1/users/google`, {
+                name: user.displayName,
+                email: user.email,
+            });
+
+            console.log(res.data); // debug
+
+            localStorage.setItem("token", res.data.data.token);
+
+            navigate("/"); // redirect to home
+
+        } catch (err) {
+            console.error(err);
+            alert("Google login failed");
+        }
     };
-
-    useEffect(() => {
-        const fetchRedirectResult = async () => {
-            try {
-                const result = await getRedirectResult(auth);
-                if (!result) return; // first load, no redirect yet
-
-                const user = result.user;
-                const res = await axios.post(`${API}/api/auth/users/google`, {
-                    name: user.displayName,
-                    email: user.email,
-                });
-
-                localStorage.setItem("token", res.data.token);
-                navigate("/"); // redirect after login
-            } catch (err) {
-                console.error(err);
-            }
-        };
-
-        fetchRedirectResult();
-    }, []);
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-200 to-cyan-100">
