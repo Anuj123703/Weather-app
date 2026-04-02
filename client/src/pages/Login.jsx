@@ -4,11 +4,10 @@ import { auth, provider } from "../Config/firebase";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { getRedirectResult } from "firebase/auth";
-import {API} from "../services/AuthService";
 import { signInWithRedirect } from "firebase/auth";
 
 function Login() {
-
+    const API = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
