@@ -1,20 +1,20 @@
 import axios from "axios";
 
-export const API = "https://weather-app-icbr.onrender.com";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const registerUser = (data) => {
-    return axios.post(`${API}/register`, data);
+    return axios.post(`${BASE_URL}/register`, data);
 };
 
 export const loginUser = (data) => {
-    return axios.post(`${API}/login`, data);
+    return axios.post(`${BASE_URL}/login`, data);
 };
 
 export const getProfile = () => {
 
     const token = localStorage.getItem("token");
 
-    return axios.get(`${API}/profile`, {
+    return axios.get(`${BASE_URL}/profile`, {
         headers: {
             Authorization: `Bearer ${token}`
         }

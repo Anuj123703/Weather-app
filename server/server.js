@@ -3,7 +3,11 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.routes.js";
+import cors from "cors";
 
+app.use(cors({
+    origin: "*"
+}));
 
 dotenv.config();
 connectDB();
