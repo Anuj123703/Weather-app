@@ -7,7 +7,7 @@ import userRoutes from "./routes/user.routes.js";
 dotenv.config();
 connectDB();
 
-const app = express(); // ✅ SABSE PEHLE
+const app = express(); //
 
 // 🔥 COOP FIX (IMPORTANT)
 app.use((req, res, next) => {

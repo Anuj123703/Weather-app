@@ -22,7 +22,7 @@ function Register() {
         try {
 
             await registerUser({ username, email, password });
-
+           
             alert("Registration successful");
 
             navigate("/login");

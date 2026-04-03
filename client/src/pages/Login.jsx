@@ -1,12 +1,11 @@
-import { loginUser } from "../services/AuthService";
+import { loginUser, googleLogin } from "../services/AuthService";
 import { useNavigate, Link } from "react-router-dom";
 import { auth, provider } from "../Config/firebase";
-import axios from "axios";
 import { useState } from "react";
 import { signInWithPopup } from "firebase/auth";
 
+
 function Login() {
-    const API = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -32,14 +31,14 @@ function Login() {
 
             const user = result.user;
 
-            const res = await axios.post(`${API}/api/v1/users/google`, {
+            const res = await googleLogin({
                 name: user.displayName,
                 email: user.email,
             });
 
             console.log(res.data); // debug
 
-            localStorage.setItem("token", res.data.data.token);
+            localStorage.setItem("token", res.data.token);
 
             navigate("/"); // redirect to home
 
